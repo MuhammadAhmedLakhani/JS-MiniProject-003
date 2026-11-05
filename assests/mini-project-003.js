@@ -70,25 +70,50 @@
 
 // updateCity(list, id, city): a nested-looking update, kept immutable.
 
+// const sampleContacts = [
+//     { id: 1, name: "Ayesha", phone: "03001234567", city: "Karachi", tags: ["work"] },
+//     { id: 2, name: "Ahmed", phone: "03121234567", city: "Lahore", tags: [] },
+//     { id: 3, name: "Usman", phone: "03331234567", city: "Islamabad", tags: ["family", "friend"] },
+// ];
+
+// let updateCity = (list, id, city) => {
+//     const idStatus = list.findIndex(elem => elem.id === id)
+//     if (idStatus === -1) {
+//         return list
+//     }
+//     else {
+//         const newList = [...list];
+//         newList.splice(idStatus,1,{...newList[idStatus],city:city})
+//         return newList
+//     }
+// }
+
+// console.log(updateCity(sampleContacts,1,"Johansburg"))
+// console.log(updateCity(sampleContacts, 3, "Multan"))
+// console.log(updateCity(sampleContacts, 99, "Multan"))
+// console.log(sampleContacts[2].city)
+
+//--- removeContact(list, id): refuse if not found.
+
 const sampleContacts = [
     { id: 1, name: "Ayesha", phone: "03001234567", city: "Karachi", tags: ["work"] },
     { id: 2, name: "Ahmed", phone: "03121234567", city: "Lahore", tags: [] },
     { id: 3, name: "Usman", phone: "03331234567", city: "Islamabad", tags: ["family", "friend"] },
 ];
 
-let updateCity = (list, id, city) => {
+
+const removeContact = (list, id) => {
     const idStatus = list.findIndex(elem => elem.id === id)
     if (idStatus === -1) {
         return list
     }
     else {
-        const newList = [...list];
-        newList.splice(idStatus,1,{...newList[idStatus],city:city})
+        let newList = [...list]
+        newList = newList.filter(elem => elem.id != id)
         return newList
     }
 }
 
-console.log(updateCity(sampleContacts,1,"Johansburg"))
-console.log(updateCity(sampleContacts, 3, "Multan"))
-console.log(updateCity(sampleContacts, 99, "Multan"))
-console.log(sampleContacts[2].city)
+
+
+console.log(removeContact(sampleContacts,2))
