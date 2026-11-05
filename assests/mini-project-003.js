@@ -39,31 +39,56 @@
 
 // ---updateContact
 
+// const sampleContacts = [
+//   { id: 1, name: "Ayesha", phone: "03001234567", city: "Karachi", tags: ["work"] },
+//   { id: 2, name: "Ahmed", phone: "03121234567", city: "Lahore", tags: [] },
+//   { id: 3, name: "Usman", phone: "03331234567", city: "Islamabad", tags: ["family", "friend"] },
+// ];
+
+// const updateContact = (list, id, changes) => {
+//      const idStatus = list.findIndex(elem => elem.id === id)
+//      console.log("idStatus -->", idStatus)
+//     if(idStatus === -1) {
+//         return list
+//     }
+//     else {
+//         const newList = [...list]
+//         newList.splice(idStatus,1, {...newList[idStatus],...changes} )
+//         return newList
+//     }
+// }
+
+// const updatedList =  updateContact(sampleContacts,1,{})
+// const updatedList1 =  updateContact(sampleContacts,3,{ city: "Multan" })
+// const updatedList2 =  updateContact(sampleContacts,99,{ city: "Sydney" })
+// const updatedList3 =  updateContact(sampleContacts,99,{ phone: "03000000000", city: "Quetta" })
+// console.log(updatedList)
+// console.log(updatedList1)
+// console.log(updatedList2)
+// console.log(updatedList3)
+// console.log(sampleContacts[2].city)
+
+// updateCity(list, id, city): a nested-looking update, kept immutable.
+
 const sampleContacts = [
-  { id: 1, name: "Ayesha", phone: "03001234567", city: "Karachi", tags: ["work"] },
-  { id: 2, name: "Ahmed", phone: "03121234567", city: "Lahore", tags: [] },
-  { id: 3, name: "Usman", phone: "03331234567", city: "Islamabad", tags: ["family", "friend"] },
+    { id: 1, name: "Ayesha", phone: "03001234567", city: "Karachi", tags: ["work"] },
+    { id: 2, name: "Ahmed", phone: "03121234567", city: "Lahore", tags: [] },
+    { id: 3, name: "Usman", phone: "03331234567", city: "Islamabad", tags: ["family", "friend"] },
 ];
 
-const updateContact = (list, id, changes) => {
-     const idStatus = list.findIndex(elem => elem.id === id)
-     console.log("idStatus -->", idStatus)
-    if(idStatus === -1) {
+let updateCity = (list, id, city) => {
+    const idStatus = list.findIndex(elem => elem.id === id)
+    if (idStatus === -1) {
         return list
     }
     else {
-        const newList = [...list]
-        newList.splice(idStatus,1, {...newList[idStatus],...changes} )
+        const newList = [...list];
+        newList.splice(idStatus,1,{...newList[idStatus],city:city})
         return newList
     }
 }
 
-const updatedList =  updateContact(sampleContacts,1,{})
-const updatedList1 =  updateContact(sampleContacts,3,{ city: "Multan" })
-const updatedList2 =  updateContact(sampleContacts,99,{ city: "Sydney" })
-const updatedList3 =  updateContact(sampleContacts,99,{ phone: "03000000000", city: "Quetta" })
-console.log(updatedList)
-console.log(updatedList1)
-console.log(updatedList2)
-console.log(updatedList3)
+console.log(updateCity(sampleContacts,1,"Johansburg"))
+console.log(updateCity(sampleContacts, 3, "Multan"))
+console.log(updateCity(sampleContacts, 99, "Multan"))
 console.log(sampleContacts[2].city)
