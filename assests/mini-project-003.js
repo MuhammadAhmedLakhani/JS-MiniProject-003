@@ -95,25 +95,117 @@
 
 //--- removeContact(list, id): refuse if not found.
 
+// const sampleContacts = [
+//     { id: 1, name: "Ayesha", phone: "03001234567", city: "Karachi", tags: ["work"] },
+//     { id: 2, name: "Ahmed", phone: "03121234567", city: "Lahore", tags: [] },
+//     { id: 3, name: "Usman", phone: "03331234567", city: "Islamabad", tags: ["family", "friend"] },
+// ];
+
+
+// const removeContact = (list, id) => {
+//     const idStatus = list.findIndex(elem => elem.id === id)
+//     if (idStatus === -1) {
+//         return list
+//     }
+//     else {
+//         let newList = [...list]
+//         newList = newList.filter(elem => elem.id != id)
+//         return newList
+//     }
+// }
+
+
+
+// console.log(removeContact(sampleContacts,2))
+
+//--- addTag(list, id, tag) and removeTag(list, id, tag): no duplicate tags.
+
+
 const sampleContacts = [
     { id: 1, name: "Ayesha", phone: "03001234567", city: "Karachi", tags: ["work"] },
     { id: 2, name: "Ahmed", phone: "03121234567", city: "Lahore", tags: [] },
     { id: 3, name: "Usman", phone: "03331234567", city: "Islamabad", tags: ["family", "friend"] },
 ];
 
+//initial draft (working but too long and messy)
 
-const removeContact = (list, id) => {
+const addTag = (list, id, tag) => {
+    //1 confirming id
     const idStatus = list.findIndex(elem => elem.id === id)
     if (idStatus === -1) {
         return list
     }
     else {
-        let newList = [...list]
-        newList = newList.filter(elem => elem.id != id)
-        return newList
+
+        // removing whitespacing from tag 
+        tag = tag.trim()
+
+
+        //2: checking tags property missing and tag is valid value is given 
+
+        const missingStatus = list[idStatus].tags === undefined || list[idStatus].tags === null;
+        const blankStatus = tag === "" ? true : false  
+
+        if (missingStatus === true) {
+            let newList = [...list];
+
+            if (blankStatus === false) {
+                newList.splice(idStatus, 1, { ...newList[idStatus], tags: [ tag] })
+
+                return newList
+
+            } else {
+                return list
+            }
+
+
+
+        } else if (missingStatus === false) {
+            let newList = [...list];
+            // console.log("newList  (before)-->:",newList)
+            let tagsArray = newList[idStatus].tags
+
+            if (blankStatus === true) {
+                return list
+            }
+            else {
+                //4:finding duplicate tag
+                if(!tagsArray.includes(tag)){
+                    newList.splice(idStatus, 1, { ...newList[idStatus], tags: [...newList[idStatus].tags, tag] })
+                    return newList
+                }
+                else{
+                    return list
+                }
+
+            }
+
+        }
+        else {
+            return list
+        }
     }
 }
 
+// 1. normal add
+console.log(addTag(sampleContacts, 2, "Relative")[1].tags);   // ["Relative"]  (works now)
 
 
-console.log(removeContact(sampleContacts,2))
+// 2. duplicate: must return a list, with no second "work"
+console.log(addTag(sampleContacts, 1, "work")[0].tags);        // ["work"]  (now: crashes, function returned undefined)
+
+// 3. unknown id: same list back
+console.log(addTag(sampleContacts, 99, "x") === sampleContacts);  // true  (now: crashes on list[-1])
+
+// 4. blank tag refused
+console.log(addTag(sampleContacts, 1, "   ")[0].tags);         // ["work"]  (now: adds the blank tag)
+
+// 5. contact with no tags property
+console.log(addTag([{ id: 9, name: "Zed" }], 9, "new")[0].tags);  // ["new"]  (now: crashes)
+
+// 6. original untouched
+console.log("original -->   ",sampleContacts);                           // ["work"]
+
+//special case :
+
+console.log(addTag([{ id: 9, name: "Zed" }], 9, " "));
