@@ -213,42 +213,42 @@
 
 // second draft
 
-const sampleContacts = [
-    { id: 1, name: "Ayesha", phone: "03001234567", city: "Karachi", tags: ["work"] },
-    { id: 2, name: "Ahmed", phone: "03121234567", city: "Lahore", tags: [] },
-    { id: 3, name: "Usman", phone: "03331234567", city: "Islamabad", tags: ["family", "friend"] },
-];
+// const sampleContacts = [
+//     { id: 1, name: "Ayesha", phone: "03001234567", city: "Karachi", tags: ["work"] },
+//     { id: 2, name: "Ahmed", phone: "03121234567", city: "Lahore", tags: [] },
+//     { id: 3, name: "Usman", phone: "03331234567", city: "Islamabad", tags: ["family", "friend"] },
+// ];
 
-let addTag = (list, id, tag) => {
+// let addTag = (list, id, tag) => {
 
-    //triming tag
+//     //triming tag
 
-    tag = tag.trim()
+//     tag = tag.trim()
 
-     // 1. not found
+//      // 1. not found
 
-    let index = list.findIndex(elem => elem.id === id)
+//     let index = list.findIndex(elem => elem.id === id)
 
-     if(index === -1) return list
-     
-     //2:missing property
+//      if(index === -1) return list
 
-    let tags  = list[index].tags??[]
-    
-    //Blank tag check
-    
-    if(tag === "") return list
-    //Duplicate check
+//      //2:missing property
 
-    if(tags.includes(tag)) return  list
-    
+//     let tags  = list[index].tags??[]
 
-    //update tags array
+//     //Blank tag check
 
-    let newList  = [...list]
-    newList.splice(index,1,{...newList[index], tags:[...tags,tag]})
-    return newList
-}
+//     if(tag === "") return list
+//     //Duplicate check
+
+//     if(tags.includes(tag)) return  list
+
+
+//     //update tags array
+
+//     let newList  = [...list]
+//     newList.splice(index,1,{...newList[index], tags:[...tags,tag]})
+//     return newList
+// }
 
 
 
@@ -256,21 +256,93 @@ let addTag = (list, id, tag) => {
 // console.log(addTag(sampleContacts, 2, "Relative")[1].tags);   // ["Relative"]  (works now)
 
 
-// // 2. duplicate: must return a list, with no second "work"
+// // // 2. duplicate: must return a list, with no second "work"
 // console.log(addTag(sampleContacts, 1, "work")[0].tags);        // ["work"]  (now: crashes, function returned undefined)
 
-// // 3. unknown id: same list back
+// // // 3. unknown id: same list back
 // console.log(addTag(sampleContacts, 99, "x") === sampleContacts);  // true  (now: crashes on list[-1])
 
-// // 4. blank tag refused
+// // // 4. blank tag refused
 // console.log(addTag(sampleContacts, 1, "   ")[0].tags);         // ["work"]  (now: adds the blank tag)
 
-// // 5. contact with no tags property
-console.log(addTag([{ id: 9, name: "Zed" }], 9, "new") );  // ["new"]  (now: crashes)
+// // // 5. contact with no tags property
+// console.log(addTag([{ id: 9, name: "Zed" }], 9, "new")[0].tags );  // ["new"]  (now: crashes)
 
-// // 6. original untouched
-// console.log("original -->   ",sampleContacts);                           // ["work"]
+// // // 6. original untouched
+// console.log("original -->   ",sampleContacts[0].tags);                           // ["work"]
 
-// //special case :
+// // //special case :
 
 // console.log(addTag([{ id: 9, name: "Zed" }], 9, " "));
+
+// ----------------------------------------   remove tag -----------------------------
+
+// Instructions for removeTag
+
+// Before writing any code (10 minutes): copy this table into your file as comments, and fill in the right-hand column in your own words.
+
+// Situation	                                                   What should removeTag return?
+// Contact id not found	                                                     -1
+// Contact has no tags property	                                             contactslist
+// Contact has tags: null	                                                 empty array --> []
+// Tag isn’t in the contact’s tags	                                         contact list original
+// Tag is blank or only spaces	                                             contact list original
+// Tag has extra spaces (" work ") and "work" is in the list	             contact list with work tag removed
+// Tag matches only by different case ("Work" vs "work")	                 removed work from list
+// Removing the last remaining tag	
+
+
+const removeTag = (list, id, tag) => {
+
+    //check id is present
+    let index = list.findIndex(elem => elem.id === id)
+    if (index === -1) return list
+
+
+    //handle missing tags property
+
+    let tags = list[index].tags ?? []
+
+    //remove space from the tag in case
+
+    tag = tag.trim()
+
+    //check tag presence
+
+    if (!(tags.includes(tag))) return list
+
+
+    //remove tag given from tags given
+
+    tags = tags.filter(elem => elem !== tag)
+
+    //update list after removal
+
+    const newList = [...list]
+    newList.splice(index, 1, { ...newList[index], tags: tags }) /// newList.splice(index,1,{...newList[index],tags:[...tags]} --> (also correct)
+    return newList
+
+}
+
+
+const fresh = () => [
+    { id: 1, name: "A", tags: ["work", "gym"] },
+    { id: 2, name: "B", tags: ["solo"] },
+    { id: 3, name: "C" },
+];
+
+console.log(removeTag(fresh(), 1, "gym")[0].tags);                 // ["work"]
+console.log(removeTag(fresh(), 2, "solo")[1].tags);                // []  (last tag removed)
+const a = fresh();
+console.log(removeTag(a, 1, "nope") === a);                        // true  (tag not there)
+console.log(removeTag(a, 99, "work") === a);                       // true  (no such contact)
+console.log(removeTag(a, 3, "x") === a);                           // true  (no tags property)
+console.log(removeTag(a, 1, "   ") === a);                         // true  (blank)
+console.log(removeTag(a, 1, " work ")[0].tags);                    // ["gym"]  (trimmed)
+
+const b = fresh();
+removeTag(b, 1, "gym");
+console.log(b[0].tags);                                            // ["work", "gym"]  (original untouched)
+
+const out = removeTag(fresh(), 1, "gym");
+console.log(out[1] === fresh()[1]);                                // false (a new fresh() each time, ignore)
