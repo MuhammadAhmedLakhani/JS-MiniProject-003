@@ -292,57 +292,160 @@
 // Removing the last remaining tag	
 
 
-const removeTag = (list, id, tag) => {
+// const removeTag = (list, id, tag) => {
 
-    //check id is present
-    let index = list.findIndex(elem => elem.id === id)
-    if (index === -1) return list
-
-
-    //handle missing tags property
-
-    let tags = list[index].tags ?? []
-
-    //remove space from the tag in case
-
-    tag = tag.trim()
-
-    //check tag presence
-
-    if (!(tags.includes(tag))) return list
+//     //check id is present
+//     let index = list.findIndex(elem => elem.id === id)
+//     if (index === -1) return list
 
 
-    //remove tag given from tags given
+//     //handle missing tags property
 
-    tags = tags.filter(elem => elem !== tag)
+//     let tags = list[index].tags ?? []
 
-    //update list after removal
+//     //remove space from the tag in case
 
-    const newList = [...list]
-    newList.splice(index, 1, { ...newList[index], tags: tags }) /// newList.splice(index,1,{...newList[index],tags:[...tags]} --> (also correct)
-    return newList
+//     tag = tag.trim()
 
+//     //check tag presence
+
+//     if (!(tags.includes(tag))) return list
+
+
+//     //remove tag given from tags given
+
+//     tags = tags.filter(elem => elem !== tag)
+
+//     //update list after removal
+
+//     const newList = [...list]
+//     newList.splice(index, 1, { ...newList[index], tags: tags }) /// newList.splice(index,1,{...newList[index],tags:[...tags]} --> (also correct)
+//     return newList
+
+// }
+
+
+// const fresh = () => [
+//     { id: 1, name: "A", tags: ["work", "gym"] },
+//     { id: 2, name: "B", tags: ["solo"] },
+//     { id: 3, name: "C" },
+// ];
+
+// console.log(removeTag(fresh(), 1, "gym")[0].tags);                 // ["work"]
+// console.log(removeTag(fresh(), 2, "solo")[1].tags);                // []  (last tag removed)
+// const a = fresh();
+// console.log(removeTag(a, 1, "nope") === a);                        // true  (tag not there)
+// console.log(removeTag(a, 99, "work") === a);                       // true  (no such contact)
+// console.log(removeTag(a, 3, "x") === a);                           // true  (no tags property)
+// console.log(removeTag(a, 1, "   ") === a);                         // true  (blank)
+// console.log(removeTag(a, 1, " work ")[0].tags);                    // ["gym"]  (trimmed)
+
+// const b = fresh();
+// removeTag(b, 1, "gym");
+// console.log(b[0].tags);                                            // ["work", "gym"]  (original untouched)
+
+// const out = removeTag(fresh(), 1, "gym");
+// console.log(out[1] === fresh()[1]);                                // false (a new fresh() each time, ignore)
+
+
+//----------------------------------- warm up -----------------------------------------
+
+// const sampleContacts = [
+//     { id: 1, name: "Ayesha", phone: "03001234567", city: "Karachi", tags: ["work"] },
+//     { id: 2, name: "Ahmed", phone: "03121234567", city: "Lahore", tags: [] },
+//     { id: 3, name: "Usman", phone: "03331234567", city: "Islamabad", tags: ["family", "friend"] },
+// ];
+
+
+
+
+// const replaceContact = (list, contactObject) => {
+
+//     //check contact is int he list of contacts
+
+//     const {id} = contactObject;
+
+//     const index =  list.findIndex(elem => elem.id === id)
+//     if(index === -1) return list
+
+//     //get copy of original list
+
+//     const newList = [... list]
+
+//     //updating the object in contact list
+
+//     newList.splice(index, 1, contactObject)
+
+//     return newList
+// }
+
+
+
+// console.log(replaceContact(sampleContacts,{ id: 2, name: "Basil", phone: "2321234567", city: "Melborne", tags: ["sucessfull"] }))
+
+
+// Task 1: searchContacts(list, text)
+
+// Think first. Fill in the right-hand column in your own words before writing code:
+
+// Situation	                                                 What should it return?
+// text matches part of a name ("sh" finds Ayesha)	    | list original
+// Different case ("AYESHA")	                        | should be true ,not case sensitive
+// Extra spaces around the text (" ahmed ")	            | should be removed
+// No contact matches	                                | original list 
+// text is blank	                                    | returned the list 
+// text isn’t a string (undefined)	                    | return the list
+// A contact has no name	                            | is replaced with empty string
+// Match is at the start vs. the middle of the name	    | should be fully match
+
+
+const searchContacts = (list, text) => {
+
+    //remove space from text
+
+    text = text.trim()
+
+    //deal contact with no name
+
+    let newList = [...list]
+
+    newList = newList.map(elem => {
+        return {...elem,name:elem.name??" "}
+    })
+
+    //deal with blank text
+
+    if (text === "") return list
+
+    //change case for seacrh
+
+    text = text.toLowerCase()
+
+    //search in the list 
+
+    const result = newList.filter(elem => elem.name.toLowerCase().includes(text))
+
+    return result
 }
 
-
-const fresh = () => [
-    { id: 1, name: "A", tags: ["work", "gym"] },
-    { id: 2, name: "B", tags: ["solo"] },
-    { id: 3, name: "C" },
+const sampleContacts = [
+    { id: 1, name:undefined, phone: "03001234567", city: "Karachi", tags: ["work"] },
+    { id: 2, name: "Ahmed", phone: "03121234567", city: "Lahore", tags: [] },
+    { id: 3, name: "Usman", phone: "03331234567", city: "Islamabad", tags: ["family", "friend"] },
 ];
 
-console.log(removeTag(fresh(), 1, "gym")[0].tags);                 // ["work"]
-console.log(removeTag(fresh(), 2, "solo")[1].tags);                // []  (last tag removed)
-const a = fresh();
-console.log(removeTag(a, 1, "nope") === a);                        // true  (tag not there)
-console.log(removeTag(a, 99, "work") === a);                       // true  (no such contact)
-console.log(removeTag(a, 3, "x") === a);                           // true  (no tags property)
-console.log(removeTag(a, 1, "   ") === a);                         // true  (blank)
-console.log(removeTag(a, 1, " work ")[0].tags);                    // ["gym"]  (trimmed)
+console.log(searchContacts(sampleContacts, "a").map(elem => elem.name))
 
-const b = fresh();
-removeTag(b, 1, "gym");
-console.log(b[0].tags);                                            // ["work", "gym"]  (original untouched)
 
-const out = removeTag(fresh(), 1, "gym");
-console.log(out[1] === fresh()[1]);                                // false (a new fresh() each time, ignore)
+
+
+
+
+
+
+
+
+
+
+
+
