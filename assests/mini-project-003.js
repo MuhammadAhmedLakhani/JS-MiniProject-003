@@ -428,32 +428,91 @@
 //     return result
 // }
 
+// const sampleContacts = [
+//     { id: 1, name:undefined, phone: "03001234567", city: "Karachi", tags: ["work"] },
+//     { id: 2, name: "Ahmed", phone: "03121234567", city: "Lahore", tags: [] },
+//     { id: 3, name: "Usman", phone: "03331234567", city: "Islamabad", tags: ["family", "friend"] },
+// ];
+
+
+
+// // --- searchContacts (refactored --> much cleaner and professional approach)
+
+
+// const searchContacts = (list,text) => {
+//     //check only text is provided
+//     if(typeof(text) !== 'string') return [];
+
+//     //remove space and change the case 
+
+//     text = text.trim().toLowerCase()
+
+//     //filter relevant data
+
+//     return list.filter(elem => elem.name??" ".toLocaleLowerCase().includes(text))
+// }
+
+// console.log(searchContacts(sampleContacts, "a").map(elem => elem.name))
+
+
+// Task 2: saveContacts(list) and loadContacts()
+
+// Think first:
+
+// Situation	                                        What should loadContacts() return?
+// First run, nothing saved	
+// Saved list, then reloaded	
+// Saved text is corrupt ("{bad")	
+// Saved text is valid but not a list ({} or 5)	
+// Save 3 contacts, then save 2	                                        
+
+
 const sampleContacts = [
-    { id: 1, name:undefined, phone: "03001234567", city: "Karachi", tags: ["work"] },
+    { id: 1, name: undefined, phone: "03001234567", city: "Karachi", tags: ["work"] },
     { id: 2, name: "Ahmed", phone: "03121234567", city: "Lahore", tags: [] },
     { id: 3, name: "Usman", phone: "03331234567", city: "Islamabad", tags: ["family", "friend"] },
 ];
 
 
+// localStorage.clear()
 
-// --- searchContacts (refactored --> much cleaner and professional approach)
+// const saveContacts = (list) => {
+
+//     let text = JSON.stringify(list);
+
+//     //set in localtorage
+
+//     localStorage.setItem("contacts", text)
+
+// }
+// saveContacts(sampleContacts)
+
+//safeParse 
 
 
-const searchContacts = (list,text) => {
-    //check only text is provided
-    if(typeof(text) !== 'string') return [];
-    
-    //remove space and change the case 
+const saveParse = (text, fallback) => {
+    if (text === null || Array.isArray(text) !== true) return fallback
+    try {
+        return  JSON.parse(text)
+    }catch(error) {
+        return fallback
+    }
 
-    text = text.trim().toLowerCase()
-    
-    //filter relevant data
-
-    return list.filter(elem => elem.name??" ".toLocaleLowerCase().includes(text))
 }
 
-console.log(searchContacts(sampleContacts, "a").map(elem => elem.name))
 
+const loadContacts = () => {
+
+    let text = localStorage.getItem("contacts")
+
+    //call safeParse
+
+    return saveParse(text,[])
+
+
+}
+
+console.log(loadContacts())
 
 
 
