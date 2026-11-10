@@ -399,34 +399,34 @@
 // Match is at the start vs. the middle of the name	    | should be fully match
 
 
-const searchContacts = (list, text) => {
+// const searchContacts = (list, text) => {
 
-    //remove space from text
+//     //remove space from text
 
-    text = text.trim()
+//     text = text.trim()
 
-    //deal contact with no name
+//     //deal contact with no name
 
-    let newList = [...list]
+//     let newList = [...list]
 
-    newList = newList.map(elem => {
-        return {...elem,name:elem.name??" "}
-    })
+//     newList = newList.map(elem => {
+//         return {...elem,name:elem.name??" "}
+//     })
 
-    //deal with blank text
+//     //deal with blank text
 
-    if (text === "") return list
+//     if (text === "") return list
 
-    //change case for seacrh
+//     //change case for seacrh
 
-    text = text.toLowerCase()
+//     text = text.toLowerCase()
 
-    //search in the list 
+//     //search in the list 
 
-    const result = newList.filter(elem => elem.name.toLowerCase().includes(text))
+//     const result = newList.filter(elem => elem.name.toLowerCase().includes(text))
 
-    return result
-}
+//     return result
+// }
 
 const sampleContacts = [
     { id: 1, name:undefined, phone: "03001234567", city: "Karachi", tags: ["work"] },
@@ -434,8 +434,25 @@ const sampleContacts = [
     { id: 3, name: "Usman", phone: "03331234567", city: "Islamabad", tags: ["family", "friend"] },
 ];
 
-console.log(searchContacts(sampleContacts, "a").map(elem => elem.name))
 
+
+// --- searchContacts (refactored --> much cleaner and professional approach)
+
+
+const searchContacts = (list,text) => {
+    //check only text is provided
+    if(typeof(text) !== 'string') return [];
+    
+    //remove space and change the case 
+
+    text = text.trim().toLowerCase()
+    
+    //filter relevant data
+
+    return list.filter(elem => elem.name??" ".toLocaleLowerCase().includes(text))
+}
+
+console.log(searchContacts(sampleContacts, "a").map(elem => elem.name))
 
 
 
