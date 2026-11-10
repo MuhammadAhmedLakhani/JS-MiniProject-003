@@ -467,11 +467,11 @@
 // Save 3 contacts, then save 2	                                        
 
 
-const sampleContacts = [
-    { id: 1, name: undefined, phone: "03001234567", city: "Karachi", tags: ["work"] },
-    { id: 2, name: "Ahmed", phone: "03121234567", city: "Lahore", tags: [] },
-    { id: 3, name: "Usman", phone: "03331234567", city: "Islamabad", tags: ["family", "friend"] },
-];
+// const sampleContacts = [
+//     { id: 1, name: undefined, phone: "03001234567", city: "Karachi", tags: ["work"] },
+//     { id: 2, name: "Ahmed", phone: "03121234567", city: "Lahore", tags: [] },
+//     { id: 3, name: "Usman", phone: "03331234567", city: "Islamabad", tags: ["family", "friend"] },
+// ];
 
 
 // localStorage.clear()
@@ -490,36 +490,78 @@ const sampleContacts = [
 //safeParse 
 
 
-const saveParse = (text, fallback) => {
-    if (text === null || Array.isArray(text) !== true) return fallback
-    try {
-        return  JSON.parse(text)
-    }catch(error) {
-        return fallback
-    }
+// const saveParse = (text, fallback) => {
+//     if (text === null || Array.isArray(text) !== true) return fallback
+//     try {
+//         return  JSON.parse(text)
+//     }catch(error) {
+//         return fallback
+//     }
+
+// }
+
+
+// const loadContacts = () => {
+
+//     let text = localStorage.getItem("contacts")
+
+//     //call safeParse
+
+//     return saveParse(text,[])
+
+
+// }
+
+// console.log(loadContacts())
+
+
+// Task 3:  printContacts(list)
+
+// Think first:
+
+// Situation	                                                  What should be printed?
+// Empty list	                                                | none
+// Normal contact	                                            | propert and value    
+// Contact with tags: [] or no tags at all	                    | simply print   
+// Contact with several tags (how are they separated?)	        | 
+// Contact with no city	
+// Does it return anything, or only print?	
+
+
+
+const sampleContacts = [
+    { id: 1, name: undefined, phone: "03001234567", tags: ["work"] },
+    { id: 2, name: "Ahmed", phone: "03121234567", city: "Lahore", tags: [] },
+    { id: 3, name: "Usman", phone: "03331234567", city: "Islamabad", tags: ["family", "friend"] },
+];
+
+const printContacts = (list) => {
+
+    //check list is arrays of objects only
+    
+    if( !(Array.isArray(list)) ) return "Invalid ContactS list Provided"
+
+    //check list length case
+
+    if (list.length === 0) return "No Contacts"
+
+    // deal property absences
+
+    list.forEach(elem => {
+        elem.name = elem.name??"Unknown"
+        elem.city = elem.city??"Unknown"
+
+        // special case : Or here return left value if truthy value else right side value is returned
+        elem.tags = (elem.tags??[]).join(" @ ")||"none"
+
+        // print the contacts after edge cases 
+        console.log("----------------------") 
+        console.log(`name:${elem.name}  phone:${elem.phone} city:${elem.city} tags:${elem.tags}`)
+    });
 
 }
 
-
-const loadContacts = () => {
-
-    let text = localStorage.getItem("contacts")
-
-    //call safeParse
-
-    return saveParse(text,[])
-
-
-}
-
-console.log(loadContacts())
-
-
-
-
-
-
-
+console.log(printContacts({name:"DT"}))
 
 
 
